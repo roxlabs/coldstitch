@@ -1,14 +1,19 @@
-# Snippets from actual code
+# Create complex code snippets with just Tagged Templates
 
-Coldsnip extracts code snippets from codebases to ensure code embeded on documentation, blog posts and books are always _correct_ and _up-to-date_. Stop writing code on Markdown and HTML files and focus on working samples.
+Coldstitch is a small but powerful library that enables JavaScript/TypeScript developers to write from simple to complex code snippets with ease. It uses [Tagged Templates](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates) and some tricks to make sure the generate code is correct and well indented.
 
-![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/roxlabs/coldsnip/build.yml?style=flat-square)
-![Coldsnip on NPM](https://img.shields.io/npm/v/coldsnip?style=flat-square&label=coldsnip)
-![License](https://img.shields.io/github/license/roxlabs/coldsnip?style=flat-square)
+![GitHub Build Status](https://img.shields.io/github/actions/workflow/status/roxlabs/coldstitch/build.yml?style=flat-square)
+![Coldstitch on NPM](https://img.shields.io/npm/v/coldstitch?style=flat-square&label=coldstitch)
+![License](https://img.shields.io/github/license/roxlabs/coldstitch?style=flat-square)
 
 ## About the project
 
-This project was motivated by past experiences dealing with outdated or faulty code samples in documentation, as both an open source maintainer and consumer. As developers, we often make mistakes when writing code directly on Markdown or HTML files. Coldsnip attempts to avoid those mistakes by pulling code snippets tagged in actual source code.
+This project was motivated by past experiences dealing with complex code generation on different languages. Some highlights:
+
+- adds imports of referenced types
+- serializes JS objects and arrays into the language's notation, with correct indentation
+- automatically handles indentation, so templates can be written following the file's indentation
+- support different langugae constructs via their own modules: `coldstitch/js`, `coldstitch/python`, etc
 
 ## Getting Started
 
@@ -16,59 +21,25 @@ Coldsnip can be used as a library, as a CLI or through direct integrations with 
 
 ### Library
 
-<!-- @include:start("readme.lib") -->
-
 ```ts
-const snippets = await extractSnippets([
-  { path: "src/__tests__", pattern: "snippets/twoSnippets.js" },
-]);
+// the simple use-case, it allows you to write it like this:
+const snippet = code`
+  const obj = { hello: "world" };
+  console.log(obj);
+`;
+
+// instead of like this:
+const snippet = `const obj = { hello: "world" };
+console.log(obj);`;
+
+// or this
+const snippet = `
+const obj = { hello: "world" };
+console.log(obj);
+`.trim();
 ```
 
-<!-- @include:end -->
-
-The return type is an map between the key and the snippet information, as detailed bellow:
-
-<!-- @include:start("readme.types") -->
-
-```ts
-/**
- * Represents a code snippet extracted from a source file. The field
- * `permalink` is only present when the source is from a Git repository.
- */
-export interface Snippet {
-  /** The source language. It matches the file extension. */
-  language: string;
-  /** The file path relative to the working directory. */
-  sourcePath: string;
-  /** The name of the file, derived from `sourcePath`. */
-  filename: string;
-  /** The start line of the snippet. */
-  startLine: number;
-  /** The end line of the snippet. */
-  endLine: number;
-  /** The lines to be highlighted, if any. */
-  highlightedLines: number[];
-  /** The snippet content. Leading spaces are trimmed. */
-  content: string;
-  /** The link to the file on the remote Git repo when available. */
-  permalink?: string;
-  /**
-   * An extra qualifier that can be used to differentiate snippets with the same key
-   * that might come from the same file extension.
-   */
-  qualifier?: string;
-}
-
-/**
- * A map between a `key` and a collection of {@link Snippet} represented by it.
- * Different snippets can be identified by the same key, which is the case in projects
- * with support to multiple languages that want to provide samples of the same API in
- * each supported language.
- */
-export type Snippets = { [key: string]: Snippet[] };
-```
-
-<!-- @include:end -->
+TODO: add more examples and documentation
 
 ## Roadmap
 
