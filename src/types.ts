@@ -12,10 +12,5 @@ export class ImportResolver<T extends TypeRef = TypeRef> {
 }
 
 export function isTypeRef(value: any): value is TypeRef {
-  return (
-    value &&
-    typeof value === "object" &&
-    "namespace" in value &&
-    "name" in value
-  );
+  return value && typeof value === "object" && "namespace" in value && "name" in value;
 }

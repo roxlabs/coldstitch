@@ -20,12 +20,20 @@
   ],
   "exports": {
     ".": "./lib/index.js",
-    "./js": "./lib/js.js"
+    "./js": "./lib/language/js.js",
+    "./python": "./lib/language/python.js",
+    "./swift": "./lib/language/swift.js"
   },
   "typesVersions": {
     "*": {
       "js": [
-        "./lib/js.d.ts"
+        "./lib/language/js.d.ts"
+      ],
+      "python": [
+        "./lib/language/python.d.ts"
+      ],
+      "swift": [
+        "./lib/language/swift.d.ts"
       ]
     }
   },
@@ -39,6 +47,7 @@
   "homepage": "https://github.com/roxlabs/coldstitch#readme",
   "devDependencies": {
     "prettier": "^3.1.1",
+    "prettier-plugin-organize-imports": "^3.2.4",
     "typedoc": "^0.25.4",
     "typedoc-plugin-markdown": "^3.17.1",
     "typescript": "^5.3.3",
@@ -46,5 +55,13 @@
   },
   "dependencies": {
     "tslib": "^2.6.2"
+  },
+  "prettier": {
+    "printWidth": 120,
+    "singleQuote": false,
+    "trailingComma": "all",
+    "plugins": [
+      "prettier-plugin-organize-imports"
+    ]
   }
 }

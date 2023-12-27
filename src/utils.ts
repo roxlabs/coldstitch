@@ -1,8 +1,4 @@
-import {
-  CodeFormatOptions,
-  CodeIndentOptions,
-  DEFAULT_FORMAT_OPTIONS,
-} from "./format";
+import { CodeFormatOptions, CodeIndentOptions, DEFAULT_FORMAT_OPTIONS } from "./format";
 
 const omitLineSymbol = Symbol("omitLine");
 
@@ -15,6 +11,7 @@ type ObjectBoundaryTokens = [string, string];
 export interface ObjectFormatter {
   objectTokens: ObjectBoundaryTokens;
   arrayTokens: ObjectBoundaryTokens;
+  assignToken: string;
   formatKey(key: string): string;
   formatValue(value: any): string;
 }
@@ -66,18 +63,13 @@ export function stringifyObject(
     } else {
       formattedValue = formatter.formatValue(value);
     }
-
-    lines.push(`${formattedKey}: ${formattedValue}`);
+    lines.push(`${formattedKey}${formatter.assignToken}${formattedValue}`);
   }
 
-  return `${startToken}\n${childIndent}${lines.join(
-    ",\n" + childIndent,
-  )}\n${indent}${endToken}`;
+  return `${startToken}\n${childIndent}${lines.join(",\n" + childIndent)}\n${indent}${endToken}`;
 }
 
-export function createTemplateStringsArray(
-  literals: string[],
-): TemplateStringsArray {
+export function createTemplateStringsArray(literals: string[]): TemplateStringsArray {
   const templateStringsArray = literals;
   Object.defineProperty(templateStringsArray, "raw", {
     value: literals,

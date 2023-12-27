@@ -1,6 +1,6 @@
-import { CodeImpl, type Code } from "./code";
-import { ImportResolver, TypeRef } from "./types";
-import { stringifyObject } from "./utils";
+import { CodeImpl, type Code } from "../code";
+import { ImportResolver, TypeRef } from "../types";
+import { stringifyObject } from "../utils";
 
 type TypeRefTraits = {
   packageName?: string;
@@ -19,12 +19,7 @@ interface JsTypeRef extends TypeRef {
 
 export function typeRef(
   typeName: string,
-  {
-    packageName,
-    alias,
-    defaultImport = false,
-    typeOnly = false,
-  }: TypeRefTraits = {},
+  { packageName, alias, defaultImport = false, typeOnly = false }: TypeRefTraits = {},
 ): JsTypeRef {
   return {
     namespace: packageName ?? "",
@@ -42,6 +37,7 @@ export function obj<T extends object>(value: T): Code {
   const obj = stringifyObject(value, {
     objectTokens: ["{", "}"],
     arrayTokens: ["[", "]"],
+    assignToken: ": ",
     formatKey: (key) => key,
     formatValue: (value) => {
       if (value === null) {
@@ -63,6 +59,10 @@ export function obj<T extends object>(value: T): Code {
     },
   });
   return CodeImpl.fromString(obj);
+}
+
+export function array<T extends object>(value: T[]): Code {
+  return obj(value);
 }
 
 class JavaScriptImportResolver extends ImportResolver<JsTypeRef> {

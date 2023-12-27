@@ -1,6 +1,6 @@
 import { expect, test } from "vitest";
 import { code } from "./code";
-import * as js from "./js";
+import * as js from "./language/js";
 
 test("basic code template", () => {
   const value = "  hello world  ";

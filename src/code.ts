@@ -1,10 +1,6 @@
 import { CodeFormatOptions, formatOptionsForLanguage } from "./format";
 import { ImportResolver, TypeRef, isTypeRef } from "./types";
-import {
-  createTemplateStringsArray,
-  getLineIndentation,
-  lastItem,
-} from "./utils";
+import { createTemplateStringsArray, getLineIndentation, lastItem } from "./utils";
 
 export interface Code {
   readonly imports: TypeRef[];
@@ -35,11 +31,7 @@ export class CodeImpl implements Code {
     return imports;
   }
 
-  private resolveNestedCode(
-    code: Code,
-    currentIndent: string,
-    options: CodeFormatOptions,
-  ): string {
+  private resolveNestedCode(code: Code, currentIndent: string, options: CodeFormatOptions): string {
     const codeString = code.toCodeString(options);
     const lines = codeString.split("\n");
     const firstLine = lines.shift() ?? "";
@@ -55,8 +47,7 @@ export class CodeImpl implements Code {
       }
       if (value instanceof CodeImpl) {
         // get the line right before the value interpolation and resolve its indentation
-        const currentLine =
-          lastItem(this.literals[index]?.split("\n") ?? []) ?? "";
+        const currentLine = lastItem(this.literals[index]?.split("\n") ?? []) ?? "";
         const currentIndent = getLineIndentation(currentLine);
         return this.resolveNestedCode(value, currentIndent, options);
       }
@@ -94,6 +85,13 @@ export class CodeImpl implements Code {
   }
 }
 
+/**
+ * A tagged template literal that represents code snippets.
+ *
+ * @param literals The template literals.
+ * @param values The values to interpolate.
+ * @returns A code snippet.
+ */
 export function code(literals: TemplateStringsArray, ...values: any[]): Code {
   return new CodeImpl(literals, values);
 }
