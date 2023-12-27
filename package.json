@@ -19,7 +19,7 @@
     "generator"
   ],
   "main": "./src/index.js",
-  "types": "./src/index.d.ts",
+  "types": "./src/index.ts",
   "exports": {
     ".": "./lib/index.js",
     "./js": "./lib/language/js.js",
@@ -29,13 +29,13 @@
   "typesVersions": {
     "*": {
       "js": [
-        "./lib/language/js.d.ts"
+        "./src/language/js.ts"
       ],
       "python": [
-        "./lib/language/python.d.ts"
+        "./src/language/python.ts"
       ],
       "swift": [
-        "./lib/language/swift.d.ts"
+        "./src/language/swift.ts"
       ]
     }
   },
@@ -45,6 +45,14 @@
     "format:check": "prettier --list-different \"src/**/*.ts\"",
     "test": "vitest"
   },
+  "files": [
+    "lib/",
+    "src/",
+    "CODE_OF_CONDUCT.md",
+    "LICENSE",
+    "package.json",
+    "README.md"
+  ],
   "devDependencies": {
     "prettier": "^3.1.1",
     "prettier-plugin-organize-imports": "^3.2.4",

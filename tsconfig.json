@@ -12,5 +12,5 @@
     "outDir": "./lib",
     "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["./src/**/*.test.ts", "./node_modules"]
+  "exclude": ["./lib", "./src/**/*.test.ts", "./node_modules"]
 }
