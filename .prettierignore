@@ -1,0 +1,7 @@
+build/
+coverage/
+docs/
+dist/
+lib/
+node_modules/
+package-lock.json

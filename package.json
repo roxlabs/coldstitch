@@ -1,0 +1,50 @@
+{
+  "name": "coldstitch",
+  "version": "0.1.0",
+  "description": "A code generation library, that helps you craft code snippets in code for multiple languages",
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --list-different \"src/**/*.ts\"",
+    "test": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roxlabs/coldstitch.git"
+  },
+  "keywords": [
+    "codegen",
+    "code",
+    "snippet",
+    "generator"
+  ],
+  "exports": {
+    ".": "./lib/index.js",
+    "./js": "./lib/js.js"
+  },
+  "typesVersions": {
+    "*": {
+      "js": [
+        "./lib/js.d.ts"
+      ]
+    }
+  },
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "author": "Daniel Rochetti",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/roxlabs/coldstitch/issues"
+  },
+  "homepage": "https://github.com/roxlabs/coldstitch#readme",
+  "devDependencies": {
+    "prettier": "^3.1.1",
+    "typedoc": "^0.25.4",
+    "typedoc-plugin-markdown": "^3.17.1",
+    "typescript": "^5.3.3",
+    "vitest": "^1.1.0"
+  },
+  "dependencies": {
+    "tslib": "^2.6.2"
+  }
+}
