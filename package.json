@@ -2,12 +2,12 @@
   "name": "coldstitch",
   "version": "0.1.0",
   "description": "A code generation library, that helps you craft code snippets in code for multiple languages",
-  "scripts": {
-    "build": "tsc",
-    "format": "prettier --write \"src/**/*.ts\"",
-    "format:check": "prettier --list-different \"src/**/*.ts\"",
-    "test": "vitest"
+  "author": "Daniel Rochetti",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/roxlabs/coldstitch/issues"
   },
+  "homepage": "https://github.com/roxlabs/coldstitch#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/roxlabs/coldstitch.git"
@@ -18,6 +18,8 @@
     "snippet",
     "generator"
   ],
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
   "exports": {
     ".": "./lib/index.js",
     "./js": "./lib/language/js.js",
@@ -37,14 +39,12 @@
       ]
     }
   },
-  "main": "./src/index.js",
-  "types": "./src/index.d.ts",
-  "author": "Daniel Rochetti",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/roxlabs/coldstitch/issues"
+  "scripts": {
+    "build": "tsc",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --list-different \"src/**/*.ts\"",
+    "test": "vitest"
   },
-  "homepage": "https://github.com/roxlabs/coldstitch#readme",
   "devDependencies": {
     "prettier": "^3.1.1",
     "prettier-plugin-organize-imports": "^3.2.4",
