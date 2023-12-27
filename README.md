@@ -1,4 +1,6 @@
-# Create complex code snippets with just Tagged Templates
+# Coldstitch
+
+Create complex code snippets with just Tagged Templates.
 
 Coldstitch is a small but powerful library that enables JavaScript/TypeScript developers to write from simple to complex code snippets with ease. It uses [Tagged Templates](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#tagged_templates) and some tricks to make sure the generate code is correct and well indented.
 
