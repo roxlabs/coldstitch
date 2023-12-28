@@ -17,7 +17,7 @@ console.log(trimmed);
 });
 
 test("code template with type ref", () => {
-  const read = js.typeRef("readFile", { packageName: "fs/promises" });
+  const read = js.typeRef("readFile", { from: "fs/promises" });
   const snippet = code`
     ${js.imports()}
 
@@ -53,7 +53,7 @@ console.log(obj);
   );
 });
 
-test("code tempalte with object literal further indented", () => {
+test("code template with object literal further indented", () => {
   const snippet = code`
     const obj = tranform({
       input: ${js.obj({ foo: "bar" })}
@@ -69,6 +69,25 @@ const obj = tranform({
   }
 });
 console.log(obj);
+  `.trim(),
+  );
+});
+
+test("test js code template with default import", () => {
+  const fs = js.typeRef("*", { from: "fs/promises", alias: "fs", defaultImport: true });
+  const snippet = code`
+    ${js.imports()}
+
+    const package = await ${fs}.readFile("./package.json");
+    console.log(package);
+  `;
+
+  expect(snippet.toString()).toBe(
+    `
+import * as fs from "fs/promises";
+
+const package = await fs.readFile("./package.json");
+console.log(package);
   `.trim(),
   );
 });

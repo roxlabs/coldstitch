@@ -3,7 +3,7 @@ import { ImportResolver, TypeRef } from "../types";
 import { stringifyObject } from "../utils";
 
 type TypeRefTraits = {
-  packageName?: string;
+  from?: string;
   alias?: string;
   defaultImport?: boolean;
   typeOnly?: boolean;
@@ -19,7 +19,7 @@ interface JsTypeRef extends TypeRef {
 
 export function typeRef(
   typeName: string,
-  { packageName, alias, defaultImport = false, typeOnly = false }: TypeRefTraits = {},
+  { from: packageName, alias, defaultImport = false, typeOnly = false }: TypeRefTraits = {},
 ): JsTypeRef {
   return {
     namespace: packageName ?? "",
@@ -81,18 +81,27 @@ class JavaScriptImportResolver extends ImportResolver<JsTypeRef> {
     // order packages by name
     const orderedPackages = Object.keys(packages).sort();
     const statements = orderedPackages.map((packageName) => {
-      const types = packages[packageName];
-      const orderedTypes = types.sort((a, b) => a.name.localeCompare(b.name));
-      const aliases = orderedTypes
+      const types = packages[packageName].sort((a, b) => a.name.localeCompare(b.name));
+      const namedImports = types
+        .filter((type) => !type.defaultImport)
         .map((type) => {
           const typeOnly = type.typeOnly ? "type " : "";
-          if ("alias" in type && type.alias) {
+          if (type.alias) {
             return `${typeOnly}${type.name} as ${type.alias}`;
           }
           return typeOnly + type.name;
         })
         .join(", ");
-      return `import { ${aliases} } from "${packageName}";`;
+      const imports = [];
+      types
+        .filter((type) => type.defaultImport)
+        .forEach((type) => {
+          imports.push(type.alias ? `${type.name} as ${type.alias}` : type.name);
+        });
+      if (namedImports) {
+        imports.push("{", namedImports, "}");
+      }
+      return `import ${imports.join(" ")} from "${packageName}";`;
     });
     return statements.join("\n");
   }
