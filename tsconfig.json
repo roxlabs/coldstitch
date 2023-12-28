@@ -9,7 +9,6 @@
     "esModuleInterop": true,
     "rootDir": "./src",
     "baseUrl": ".",
-    "outDir": "./lib",
     "forceConsistentCasingInFileNames": true
   },
   "exclude": ["./lib", "./src/**/*.test.ts", "./node_modules"]

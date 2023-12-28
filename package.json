@@ -19,13 +19,26 @@
     "generator"
   ],
   "type": "module",
-  "main": "./lib/index.js",
+  "module": "./lib/index.js",
+  "main": "./lib/index.cjs",
   "types": "./src/index.ts",
   "exports": {
-    ".": "./lib/index.js",
-    "./js": "./lib/language/js.js",
-    "./python": "./lib/language/python.js",
-    "./swift": "./lib/language/swift.js"
+    ".": {
+      "import": "./lib/index.js",
+      "require": "./lib/index.cjs"
+    },
+    "./js": {
+      "import": "./lib/language/js.js",
+      "require": "./lib/language/js.cjs"
+    },
+    "./python": {
+      "import": "./lib/language/python.js",
+      "require": "./lib/language/python.cjs"
+    },
+    "./swift": {
+      "import": "./lib/language/swift.js",
+      "require": "./lib/language/swift.cjs"
+    }
   },
   "typesVersions": {
     "*": {
@@ -41,7 +54,7 @@
     }
   },
   "scripts": {
-    "build": "tsc",
+    "build": "vite build",
     "format": "prettier --write \"src/**/*.ts\"",
     "format:check": "prettier --list-different \"src/**/*.ts\"",
     "test": "vitest"
@@ -60,6 +73,8 @@
     "typedoc": "^0.25.4",
     "typedoc-plugin-markdown": "^3.17.1",
     "typescript": "^5.3.3",
+    "vite": "^5.0.10",
+    "vite-plugin-dts": "^3.7.0",
     "vitest": "^1.1.0"
   },
   "dependencies": {
