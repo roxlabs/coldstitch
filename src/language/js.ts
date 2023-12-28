@@ -99,6 +99,9 @@ class JavaScriptImportResolver extends ImportResolver<JsTypeRef> {
           imports.push(type.alias ? `${type.name} as ${type.alias}` : type.name);
         });
       if (namedImports) {
+        if (imports.length > 0) {
+          imports.push(",");
+        }
         imports.push("{", namedImports, "}");
       }
       return `import ${imports.join(" ")} from "${packageName}";`;
