@@ -1,6 +1,7 @@
 import { CodeImpl, type Code } from "../code";
+import { formatOptionsForLanguage } from "../format";
 import { ImportResolver, TypeRef } from "../types";
-import { stringifyObject } from "../utils";
+import { groupTypesByNamespace, stringifyObject } from "../utils";
 
 type TypeRefTraits = {
   from?: string;
@@ -34,30 +35,34 @@ export function typeRef(
 }
 
 export function obj<T extends object>(value: T): Code {
-  const obj = stringifyObject(value, {
-    objectTokens: ["{", "}"],
-    arrayTokens: ["[", "]"],
-    assignToken: ": ",
-    formatKey: (key) => key,
-    formatValue: (value) => {
-      if (value === null) {
-        return "null";
-      }
-      if (value === undefined) {
-        return "undefined";
-      }
-      if (typeof value === "string") {
-        return `"${value}"`;
-      }
-      if (typeof value === "number") {
-        return value.toString();
-      }
-      if (typeof value === "boolean") {
-        return value ? "true" : "false";
-      }
-      throw new Error(`Unsupported value type: ${typeof value}`);
+  const obj = stringifyObject(
+    value,
+    {
+      objectTokens: ["{", "}"],
+      arrayTokens: ["[", "]"],
+      assignToken: ": ",
+      formatKey: (key) => key,
+      formatValue: (value) => {
+        if (value === null) {
+          return "null";
+        }
+        if (value === undefined) {
+          return "undefined";
+        }
+        if (typeof value === "string") {
+          return `"${value}"`;
+        }
+        if (typeof value === "number") {
+          return value.toString();
+        }
+        if (typeof value === "boolean") {
+          return value ? "true" : "false";
+        }
+        throw new Error(`Unsupported value type: ${typeof value}`);
+      },
     },
-  });
+    formatOptionsForLanguage("js"),
+  );
   return CodeImpl.fromString(obj);
 }
 
@@ -67,20 +72,9 @@ export function array<T extends object>(value: T[]): Code {
 
 class JavaScriptImportResolver extends ImportResolver<JsTypeRef> {
   resolve(types: JsTypeRef[]): string {
-    const packages: Record<string, JsTypeRef[]> = {};
-    types.forEach((type) => {
-      if (!type.namespace) {
-        return;
-      }
-      if (!packages[type.namespace]) {
-        packages[type.namespace] = [];
-      }
-      packages[type.namespace].push(type);
-    });
-
-    // order packages by name
-    const orderedPackages = Object.keys(packages).sort();
-    const statements = orderedPackages.map((packageName) => {
+    const packages = groupTypesByNamespace(types);
+    const packageKeys = Object.keys(packages).sort();
+    const statements = packageKeys.map((packageName) => {
       const types = packages[packageName].sort((a, b) => a.name.localeCompare(b.name));
       const namedImports = types
         .filter((type) => !type.defaultImport)

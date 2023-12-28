@@ -1,9 +1,10 @@
 import { Code, CodeImpl } from "../code";
+import { formatOptionsForLanguage } from "../format";
 import { ImportResolver, TypeRef } from "../types";
-import { stringifyObject } from "../utils";
+import { groupTypesByNamespace, stringifyObject } from "../utils";
 
 type TypeRefTraits = {
-  module?: string;
+  from?: string;
   alias?: string;
 };
 
@@ -13,7 +14,7 @@ interface PythonTypeRef extends TypeRef {
   language: "python";
 }
 
-export function typeRef(typeName: string, { module, alias }: TypeRefTraits): PythonTypeRef {
+export function typeRef(typeName: string, { from: module, alias }: TypeRefTraits = {}): PythonTypeRef {
   return {
     namespace: module ?? "",
     name: typeName,
@@ -24,27 +25,31 @@ export function typeRef(typeName: string, { module, alias }: TypeRefTraits): Pyt
 }
 
 export function dict<T extends object>(value: T): Code {
-  const obj = stringifyObject(value, {
-    objectTokens: ["[", "]"],
-    arrayTokens: ["[", "]"],
-    assignToken: ": ",
-    formatKey: (key) => `"${key}"`,
-    formatValue: (value) => {
-      if (value === null || value === undefined) {
-        return "None";
-      }
-      if (typeof value === "string") {
-        return `"${value}"`;
-      }
-      if (typeof value === "number") {
-        return value.toString();
-      }
-      if (typeof value === "boolean") {
-        return value ? "True" : "False";
-      }
-      throw new Error(`Unsupported value type: ${typeof value}`);
+  const obj = stringifyObject(
+    value,
+    {
+      objectTokens: ["[", "]"],
+      arrayTokens: ["[", "]"],
+      assignToken: ": ",
+      formatKey: (key) => `"${key}"`,
+      formatValue: (value) => {
+        if (value === null || value === undefined) {
+          return "None";
+        }
+        if (typeof value === "string") {
+          return `"${value}"`;
+        }
+        if (typeof value === "number") {
+          return value.toString();
+        }
+        if (typeof value === "boolean") {
+          return value ? "True" : "False";
+        }
+        throw new Error(`Unsupported value type: ${typeof value}`);
+      },
     },
-  });
+    formatOptionsForLanguage("python"),
+  );
   return CodeImpl.fromString(obj);
 }
 
@@ -54,19 +59,9 @@ export function list<T extends object>(value: T[]): Code {
 
 class PythonImportResolver extends ImportResolver<PythonTypeRef> {
   resolve(types: PythonTypeRef[]): string {
-    const packages: Record<string, PythonTypeRef[]> = {};
-    types.forEach((type) => {
-      if (!type.namespace) {
-        return;
-      }
-      if (!packages[type.namespace]) {
-        packages[type.namespace] = [];
-      }
-      packages[type.namespace].push(type);
-    });
-
-    const orderedPackages = Object.keys(packages).sort();
-    const statements = orderedPackages.flatMap((packageName) => {
+    const packages = groupTypesByNamespace(types);
+    const packageKeys = Object.keys(packages).sort();
+    const statements = packageKeys.flatMap((packageName) => {
       const types = packages[packageName].sort((a, b) => a.name.localeCompare(b.name));
       const typeNames = types.map((type) => (type.alias ? `${type.name} as ${type.alias}` : type.name));
       if (!packageName) {
