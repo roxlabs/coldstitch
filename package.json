@@ -18,7 +18,7 @@
     "snippet",
     "generator"
   ],
-  "main": "./src/index.js",
+  "main": "./lib/index.js",
   "types": "./src/index.ts",
   "exports": {
     ".": "./lib/index.js",
