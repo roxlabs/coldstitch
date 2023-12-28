@@ -18,6 +18,7 @@
     "snippet",
     "generator"
   ],
+  "type": "module",
   "main": "./lib/index.js",
   "types": "./src/index.ts",
   "exports": {
