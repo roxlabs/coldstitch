@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { code } from "./code";
+import { code, omitLine } from "./code";
 import * as js from "./language/js";
 
 test("basic code template", () => {
@@ -88,6 +88,23 @@ import * as fs from "fs/promises";
 
 const package = await fs.readFile("./package.json");
 console.log(package);
+  `.trim(),
+  );
+});
+
+test("test code template with omitted line", () => {
+  const snippet = code`
+    const obj = {
+      omittedProp: ${omitLine()},
+      keepProp: "keep"
+    };
+  `;
+
+  expect(snippet.toString()).toBe(
+    `
+const obj = {
+  keepProp: "keep"
+};
   `.trim(),
   );
 });

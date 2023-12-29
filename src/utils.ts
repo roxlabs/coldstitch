@@ -1,12 +1,6 @@
 import { CodeFormatOptions, CodeIndentOptions, DEFAULT_FORMAT_OPTIONS } from "./format";
 import { TypeRef } from "./types";
 
-const omitLineSymbol = Symbol("omitLine");
-
-export function omitLine() {
-  return omitLineSymbol;
-}
-
 type ObjectBoundaryTokens = [string, string];
 
 export interface ObjectFormatter {
