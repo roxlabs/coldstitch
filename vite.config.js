@@ -18,4 +18,9 @@ export default defineConfig({
     },
   },
   plugins: [dts()],
+  test: {
+    coverage: {
+      provider: "istanbul",
+    },
+  },
 });

@@ -7,23 +7,24 @@ export type CodeFormatOptions = CodeIndentOptions & {
   stringQuote: '"' | "'";
 };
 
-export const DEFAULT_FORMAT_OPTIONS: CodeFormatOptions = {
+export const TWO_SPACES: CodeFormatOptions = {
   indentSize: 2,
   indentChar: " ",
   stringQuote: '"',
 };
 
+export const FOUR_SPACES: CodeFormatOptions = {
+  indentSize: 4,
+  indentChar: " ",
+  stringQuote: '"',
+};
+
+export const DEFAULT_FORMAT_OPTIONS = TWO_SPACES;
+
 const LANGUAGE_OPTIONS: Record<string, Partial<CodeFormatOptions>> = {
-  python: {
-    indentSize: 4,
-    indentChar: " ",
-    stringQuote: '"',
-  },
-  js: {
-    indentSize: 2,
-    indentChar: " ",
-    stringQuote: '"',
-  },
+  js: TWO_SPACES,
+  python: FOUR_SPACES,
+  swift: FOUR_SPACES,
 };
 
 export function formatOptionsForLanguage(language?: string): CodeFormatOptions {

@@ -1,10 +1,5 @@
 import { CodeFormatOptions, CodeIndentOptions, DEFAULT_FORMAT_OPTIONS } from "./format";
-
-const omitLineSymbol = Symbol("omitLine");
-
-export function omitLine() {
-  return omitLineSymbol;
-}
+import { TypeRef } from "./types";
 
 type ObjectBoundaryTokens = [string, string];
 
@@ -114,4 +109,15 @@ export function resolveIndentation(code: string): CodeIndentOptions {
 
 export function lastItem<T>(array: T[]): T | undefined {
   return array[array.length - 1];
+}
+
+export function groupTypesByNamespace<T extends TypeRef = TypeRef>(types: T[]): Record<string, T[]> {
+  const packages: Record<string, T[]> = {};
+  types.forEach((type) => {
+    if (!packages[type.namespace]) {
+      packages[type.namespace] = [];
+    }
+    packages[type.namespace].push(type);
+  });
+  return packages;
 }
