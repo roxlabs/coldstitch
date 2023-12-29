@@ -1,6 +1,6 @@
 {
   "name": "coldstitch",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "A code generation library, that helps you craft code snippets in code for multiple languages",
   "author": "Daniel Rochetti",
   "license": "MIT",
