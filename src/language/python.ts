@@ -28,7 +28,7 @@ export function dict<T extends object>(value: T): Code {
   const obj = stringifyObject(
     value,
     {
-      objectTokens: ["[", "]"],
+      objectTokens: ["{", "}"],
       arrayTokens: ["[", "]"],
       assignToken: ": ",
       formatKey: (key) => `"${key}"`,
