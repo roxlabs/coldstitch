@@ -37,28 +37,28 @@ test("python code template with object literal", () => {
 
   expect(snippet.toString()).toBe(
     `
-obj = [
+obj = {
     "foo": "bar"
-]
+}
 print(obj)`.trim(),
   );
 });
 
 test("python code template with object literal further indented", () => {
   const snippet = code`
-    obj = transform([
+    obj = transform({
         "input": ${python.dict({ foo: "bar" })}
-    ])
+    })
     print(obj)
   `;
 
   expect(snippet.toString()).toBe(
     `
-obj = transform([
-    "input": [
+obj = transform({
+    "input": {
         "foo": "bar"
-    ]
-])
+    }
+})
 print(obj)`.trim(),
   );
 });
