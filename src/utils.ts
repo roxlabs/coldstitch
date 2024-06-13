@@ -121,3 +121,7 @@ export function groupTypesByNamespace<T extends TypeRef = TypeRef>(types: T[]): 
   });
   return packages;
 }
+
+export function escapeStringQuotes(value: string, quoteChar: string = '"'): string {
+  return value.replace(new RegExp(quoteChar, "g"), `\\${quoteChar}`);
+}
