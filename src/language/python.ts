@@ -1,7 +1,7 @@
 import { Code, CodeImpl } from "../code";
 import { formatOptionsForLanguage } from "../format";
 import { ImportResolver, TypeRef } from "../types";
-import { groupTypesByNamespace, stringifyObject } from "../utils";
+import { escapeStringQuotes, groupTypesByNamespace, stringifyObject } from "../utils";
 
 type TypeRefTraits = {
   from?: string;
@@ -37,7 +37,7 @@ export function dict<T extends object>(value: T): Code {
           return "None";
         }
         if (typeof value === "string") {
-          return `"${value}"`;
+          return `"${escapeStringQuotes(value)}"`;
         }
         if (typeof value === "number") {
           return value.toString();

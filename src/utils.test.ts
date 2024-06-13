@@ -2,6 +2,7 @@ import { expect, test } from "vitest";
 import { TypeRef } from "./types";
 import {
   createTemplateStringsArray,
+  escapeStringQuotes,
   getLineIndentation,
   groupTypesByNamespace,
   lastItem,
@@ -73,4 +74,10 @@ test("groupTypesByNamespace", () => {
     ],
     ns2: [{ namespace: "ns2", name: "type3", language: "js" }],
   });
+});
+
+test("escapeStringQuotes", () => {
+  const value = 'string with "quotes"';
+  const result = escapeStringQuotes(value);
+  expect(result).toBe('string with \\"quotes\\"');
 });

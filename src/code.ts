@@ -64,7 +64,8 @@ export class CodeImpl implements Code {
 
   private resolveValues(options: CodeFormatOptions): any[] {
     const imports = this.imports;
-    return this.values.map((value, index) => {
+
+    const resolveValue = (value: any, index: number): any => {
       if (value instanceof ImportResolver) {
         return value.resolve(imports);
       }
@@ -80,6 +81,9 @@ export class CodeImpl implements Code {
         const currentIndent = getLineIndentation(currentLine);
         return this.resolveNestedCode(value, currentIndent, options);
       }
+      if (Array.isArray(value)) {
+        return value.map((item) => resolveValue(item, index)).join("\n");
+      }
       if (isTypeRef(value)) {
         return value.toString();
       }
@@ -87,7 +91,9 @@ export class CodeImpl implements Code {
         return "";
       }
       return value;
-    });
+    };
+
+    return this.values.map(resolveValue);
   }
 
   private get unindent(): string {

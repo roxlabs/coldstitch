@@ -16,6 +16,7 @@ jspm_packages/
 *.tsbuildinfo
 
 # Library distriburion
+.npmrc
 dist/
 lib/
 !.gitkeep
