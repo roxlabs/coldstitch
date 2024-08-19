@@ -25,8 +25,6 @@ test("code template with type ref", () => {
     console.log(package);
   `;
 
-  console.log(snippet.toString());
-
   expect(snippet.toString()).toBe(
     `
 import { readFile } from "fs/promises";
