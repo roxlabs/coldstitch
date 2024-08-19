@@ -108,3 +108,20 @@ const obj = {
   `.trim(),
   );
 });
+
+test("test code template with object containing an anonymous function as a value", () => {
+  const obj = {
+    fn: () => "hello",
+  };
+  expect(js.obj(obj).toString()).toBe('{\n  fn: "fn function reference"\n}');
+});
+
+test("test code template with object containing a named function as a value", () => {
+  function hello() {
+    return "hello";
+  }
+  const obj = {
+    fn: hello,
+  };
+  expect(js.obj(obj).toString()).toBe('{\n  fn: "hello function reference"\n}');
+});

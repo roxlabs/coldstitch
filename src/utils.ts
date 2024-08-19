@@ -55,6 +55,8 @@ export function stringifyObject(
         ...options,
         indentLevel: indentLevel + 1,
       });
+    } else if (typeof value === "function") {
+      formattedValue = `"${value.name} function reference"`;
     } else {
       formattedValue = formatter.formatValue(value);
     }
