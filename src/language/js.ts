@@ -52,7 +52,7 @@ export function obj<T extends object>(value: T): Code {
         if (typeof value === "string") {
           return `"${escapeStringQuotes(value)}"`;
         }
-        if (typeof value === "number") {
+        if (typeof value === "number" || typeof value === "bigint") {
           return value.toString();
         }
         if (typeof value === "boolean") {
