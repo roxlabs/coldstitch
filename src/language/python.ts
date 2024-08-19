@@ -1,6 +1,6 @@
 import { Code, CodeImpl } from "../code";
 import { formatOptionsForLanguage } from "../format";
-import { ImportResolver, TypeRef } from "../types";
+import { CustomFormatter, ImportResolver, TypeRef } from "../types";
 import { escapeStringQuotes, groupTypesByNamespace, stringifyObject } from "../utils";
 
 type TypeRefTraits = {
@@ -24,7 +24,12 @@ export function typeRef(typeName: string, { from: module, alias }: TypeRefTraits
   };
 }
 
-export function dict<T extends object>(value: T): Code {
+type DictOptions = {
+  formatter?: CustomFormatter;
+};
+
+export function dict<T extends object>(value: T, options: DictOptions = {}): Code {
+  const { formatter } = options;
   const obj = stringifyObject(
     value,
     {
@@ -33,6 +38,12 @@ export function dict<T extends object>(value: T): Code {
       assignToken: ": ",
       formatKey: (key) => `"${key}"`,
       formatValue: (value) => {
+        if (formatter) {
+          const formatted = formatter(value);
+          if (formatted !== undefined) {
+            return formatted;
+          }
+        }
         if (value === null || value === undefined) {
           return "None";
         }
