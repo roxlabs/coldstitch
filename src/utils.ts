@@ -42,15 +42,15 @@ export function stringifyObject(
       const [arrayStartToken, arrayEndToken] = formatter.arrayTokens;
       formattedValue = `${arrayStartToken}${value
         .map((value) =>
-          typeof value === "object"
-            ? stringifyObject(value, formatter, {
+          isScalar(value)
+            ? formatter.formatValue(value)
+            : stringifyObject(value, formatter, {
                 ...options,
                 indentLevel: indentLevel + 1,
-              })
-            : formatter.formatValue(value),
+              }),
         )
         .join(", ")}${arrayEndToken}`;
-    } else if (typeof value === "object" && value !== null) {
+    } else if (isPlainObject(value)) {
       formattedValue = stringifyObject(value, formatter, {
         ...options,
         indentLevel: indentLevel + 1,
@@ -126,4 +126,12 @@ export function groupTypesByNamespace<T extends TypeRef = TypeRef>(types: T[]): 
 
 export function escapeStringQuotes(value: string, quoteChar: string = '"'): string {
   return value.replace(new RegExp(quoteChar, "g"), `\\${quoteChar}`);
+}
+
+export function isPlainObject(value: any): boolean {
+  return value !== null && typeof value === "object" && value.constructor === Object;
+}
+
+export function isScalar(value: any): boolean {
+  return value === null || (typeof value !== "object" && typeof value !== "function" && !Array.isArray(value));
 }

@@ -123,3 +123,15 @@ test("test code template with object containing a named function as a value", ()
   };
   expect(js.obj(obj).toString()).toBe('{\n  fn: "hello function reference"\n}');
 });
+
+test("test code template with object containing a Date as a value and a custom formatter", () => {
+  const obj = {
+    date: new Date("2021-01-01"),
+  };
+  const formatter = (value: any) => {
+    if (value instanceof Date) {
+      return `"${value.toISOString()}"`;
+    }
+  };
+  expect(js.obj(obj, { formatter }).toString()).toBe('{\n  date: "2021-01-01T00:00:00.000Z"\n}');
+});

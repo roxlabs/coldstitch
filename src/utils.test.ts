@@ -5,6 +5,8 @@ import {
   escapeStringQuotes,
   getLineIndentation,
   groupTypesByNamespace,
+  isPlainObject,
+  isScalar,
   lastItem,
   resolveIndentation,
   resolveLineIndentation,
@@ -80,4 +82,21 @@ test("escapeStringQuotes", () => {
   const value = 'string with "quotes"';
   const result = escapeStringQuotes(value);
   expect(result).toBe('string with \\"quotes\\"');
+});
+
+test("isPlainObject", () => {
+  expect(isPlainObject({ a: 1, b: 2 })).toBe(true);
+  expect(isPlainObject(new Date())).toBe(false);
+});
+
+test("isScalar", () => {
+  expect(isScalar(1)).toBe(true);
+  expect(isScalar("string")).toBe(true);
+  expect(isScalar(true)).toBe(true);
+  expect(isScalar(null)).toBe(true);
+  expect(isScalar(undefined)).toBe(true);
+  expect(isScalar({})).toBe(false);
+  expect(isScalar([])).toBe(false);
+  expect(isScalar(new Date())).toBe(false);
+  expect(isScalar(() => {})).toBe(false);
 });
