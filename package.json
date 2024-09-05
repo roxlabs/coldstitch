@@ -1,6 +1,6 @@
 {
   "name": "coldstitch",
-  "version": "0.3.3",
+  "version": "0.4.0-alpha.0",
   "description": "A code generation library, that helps you craft code snippets in code for multiple languages",
   "author": "Daniel Rochetti",
   "license": "MIT",
@@ -27,9 +27,17 @@
       "import": "./lib/index.js",
       "require": "./lib/index.cjs"
     },
+    "./java": {
+      "import": "./lib/language/java.js",
+      "require": "./lib/language/java.cjs"
+    },
     "./js": {
       "import": "./lib/language/js.js",
       "require": "./lib/language/js.cjs"
+    },
+    "./kotlin": {
+      "import": "./lib/language/kotlin.js",
+      "require": "./lib/language/kotlin.cjs"
     },
     "./python": {
       "import": "./lib/language/python.js",
@@ -42,8 +50,14 @@
   },
   "typesVersions": {
     "*": {
+      "java": [
+        "./src/language/java.ts"
+      ],
       "js": [
         "./src/language/js.ts"
+      ],
+      "kotlin": [
+        "./src/language/kotlin.ts"
       ],
       "python": [
         "./src/language/python.ts"
@@ -79,9 +93,6 @@
     "vite": "^5.0.10",
     "vite-plugin-dts": "^3.7.0",
     "vitest": "^1.1.0"
-  },
-  "dependencies": {
-    "tslib": "^2.6.2"
   },
   "prettier": {
     "printWidth": 120,

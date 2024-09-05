@@ -1,7 +1,7 @@
 import { CodeImpl, type Code } from "../code";
 import { formatOptionsForLanguage } from "../format";
 import { CustomFormatter, ImportResolver, TypeRef } from "../types";
-import { escapeStringQuotes, groupTypesByNamespace, stringifyObject } from "../utils";
+import { escapeStringQuotes, groupTypesByNamespace, stringify } from "../utils";
 
 type TypeRefTraits = {
   from?: string;
@@ -40,7 +40,7 @@ type ObjOptions = {
 
 export function obj<T extends object>(value: T, options: ObjOptions = {}): Code {
   const { formatter } = options;
-  const obj = stringifyObject(
+  const obj = stringify(
     value,
     {
       objectTokens: ["{", "}"],

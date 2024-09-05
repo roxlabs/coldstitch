@@ -25,6 +25,8 @@ const LANGUAGE_OPTIONS: Record<string, Partial<CodeFormatOptions>> = {
   js: TWO_SPACES,
   python: FOUR_SPACES,
   swift: FOUR_SPACES,
+  java: FOUR_SPACES,
+  kotlin: FOUR_SPACES,
 };
 
 export function formatOptionsForLanguage(language?: string): CodeFormatOptions {

@@ -15,12 +15,15 @@ type IndentLevel = {
   indentLevel?: number;
 };
 
-export function stringifyObject(
-  object: Record<string, any>,
+type Reference = Record<string, any> | any[];
+
+export function stringify(
+  reference: Reference,
   formatter: ObjectFormatter,
   options: Partial<CodeFormatOptions> & IndentLevel = DEFAULT_FORMAT_OPTIONS,
 ): string {
-  const [startToken, endToken] = formatter.objectTokens;
+  const isArray = Array.isArray(reference);
+  const [startToken, endToken] = isArray ? formatter.arrayTokens : formatter.objectTokens;
   const {
     indentSize,
     indentChar,
@@ -29,29 +32,19 @@ export function stringifyObject(
     ...DEFAULT_FORMAT_OPTIONS,
     ...options,
   };
-  let indent = indentChar.repeat(indentSize * indentLevel);
-  let childIndent = indentChar.repeat(indentSize * (indentLevel + 1));
-  let lines: string[] = [];
+  const indent = indentChar.repeat(indentSize * indentLevel);
+  const childIndent = indentChar.repeat(indentSize * (indentLevel + 1));
 
-  for (let key in object) {
-    const formattedKey = formatter.formatKey(key);
-    let value = object[key];
-    let formattedValue;
+  const processValue = (value: any, key?: string): string => {
+    let formattedValue: string;
 
     if (Array.isArray(value)) {
-      const [arrayStartToken, arrayEndToken] = formatter.arrayTokens;
-      formattedValue = `${arrayStartToken}${value
-        .map((value) =>
-          isScalar(value)
-            ? formatter.formatValue(value)
-            : stringifyObject(value, formatter, {
-                ...options,
-                indentLevel: indentLevel + 1,
-              }),
-        )
-        .join(", ")}${arrayEndToken}`;
+      formattedValue = stringify(value, formatter, {
+        ...options,
+        indentLevel: indentLevel + 1,
+      });
     } else if (isPlainObject(value)) {
-      formattedValue = stringifyObject(value, formatter, {
+      formattedValue = stringify(value, formatter, {
         ...options,
         indentLevel: indentLevel + 1,
       });
@@ -60,10 +53,26 @@ export function stringifyObject(
     } else {
       formattedValue = formatter.formatValue(value);
     }
-    lines.push(`${formattedKey}${formatter.assignToken}${formattedValue}`);
-  }
 
-  return `${startToken}\n${childIndent}${lines.join(",\n" + childIndent)}\n${indent}${endToken}`;
+    if (isArray) {
+      return formattedValue;
+    } else {
+      const formattedKey = formatter.formatKey(key!);
+      return `${formattedKey}${formatter.assignToken}${formattedValue}`;
+    }
+  };
+
+  if (isArray) {
+    const content = (reference as any[]).map((value) => processValue(value)).join(", ");
+    return `${startToken}${content}${endToken}`;
+  } else {
+    const lines: string[] = [];
+    for (const key in reference as Record<string, any>) {
+      lines.push(processValue((reference as Record<string, any>)[key], key));
+    }
+    const content = lines.join(",\n" + childIndent);
+    return `${startToken}\n${childIndent}${content}\n${indent}${endToken}`;
+  }
 }
 
 export function createTemplateStringsArray(literals: string[]): TemplateStringsArray {
