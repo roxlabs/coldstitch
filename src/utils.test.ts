@@ -10,12 +10,12 @@ import {
   lastItem,
   resolveIndentation,
   resolveLineIndentation,
-  stringifyObject,
+  stringify,
 } from "./utils";
 
-test("stringifyObject", () => {
+test("stringify", () => {
   const object = { a: 1, b: [2, 3], c: { d: 4 } };
-  const result = stringifyObject(object, {
+  const result = stringify(object, {
     objectTokens: ["{", "}"],
     arrayTokens: ["[", "]"],
     assignToken: ": ",

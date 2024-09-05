@@ -79,7 +79,7 @@ export class CodeImpl implements Code {
         // get the line right before the value interpolation and resolve its indentation
         const currentLine = lastItem(this.literals[index]?.split("\n") ?? []) ?? "";
         const currentIndent = getLineIndentation(currentLine);
-        return this.resolveNestedCode(value, currentIndent, options);
+        return this.resolveNestedCode(value, currentIndent, options).trim();
       }
       if (Array.isArray(value)) {
         return value.map((item) => resolveValue(item, index)).join("\n");
