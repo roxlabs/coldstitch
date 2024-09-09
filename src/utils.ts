@@ -6,6 +6,7 @@ type ObjectBoundaryTokens = [string, string];
 export interface ObjectFormatter {
   objectTokens: ObjectBoundaryTokens;
   arrayTokens: ObjectBoundaryTokens;
+  inlineArrayElements?: boolean;
   assignToken: string;
   formatKey(key: string): string;
   formatValue(value: any): string;
@@ -28,6 +29,7 @@ export function stringify(
     indentSize,
     indentChar,
     indentLevel = 0,
+    inlineArrayElements = true,
   } = {
     ...DEFAULT_FORMAT_OPTIONS,
     ...options,
@@ -41,7 +43,7 @@ export function stringify(
     if (Array.isArray(value)) {
       formattedValue = stringify(value, formatter, {
         ...options,
-        indentLevel: indentLevel + 1,
+        indentLevel: inlineArrayElements ? indentLevel : indentLevel + 1,
       });
     } else if (isPlainObject(value)) {
       formattedValue = stringify(value, formatter, {
@@ -63,15 +65,24 @@ export function stringify(
   };
 
   if (isArray) {
-    const content = (reference as any[]).map((value) => processValue(value)).join(", ");
-    return `${startToken}${content}${endToken}`;
+    const values = (reference as any[]).map((value) => processValue(value));
+    if (inlineArrayElements) {
+      return `${startToken}${values.join(", ")}${endToken}`;
+    } else {
+      if (values.length === 0) {
+        return `${startToken}${endToken}`;
+      }
+      return `${startToken}\n${childIndent}${values.join(",\n" + childIndent)}\n${indent}${endToken}`;
+    }
   } else {
     const lines: string[] = [];
     for (const key in reference as Record<string, any>) {
       lines.push(processValue((reference as Record<string, any>)[key], key));
     }
-    const content = lines.join(",\n" + childIndent);
-    return `${startToken}\n${childIndent}${content}\n${indent}${endToken}`;
+    if (lines.length === 0) {
+      return `${startToken}${endToken}`;
+    }
+    return `${startToken}\n${childIndent}${lines.join(",\n" + childIndent)}\n${indent}${endToken}`;
   }
 }
 

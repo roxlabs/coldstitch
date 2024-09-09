@@ -62,3 +62,41 @@ obj = transform({
 print(obj)`.trim(),
   );
 });
+
+test("python code template with dict and nested array", () => {
+  const dict = {
+    nested_dict: {
+      key: "value",
+    },
+    nested_array: [
+      {
+        key: "value",
+      },
+      {
+        key: "value",
+      },
+    ],
+  };
+  const snippet = code`
+    result = call_function(
+        arguments=${python.dict(dict)}
+    )
+    print(result)
+  `;
+  expect(snippet.toString()).toBe(
+    `
+result = call_function(
+    arguments={
+        "nested_dict": {
+            "key": "value"
+        },
+        "nested_array": [{
+            "key": "value"
+        }, {
+            "key": "value"
+        }]
+    }
+)
+print(result)`.trim(),
+  );
+});
