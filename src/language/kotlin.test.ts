@@ -40,7 +40,6 @@ test("kotlin code template with arrayOf", () => {
     val array = ${kotlin.arrayOf(["foo", "bar"])}
     println(array)
   `;
-  console.log(snippet.toString());
   expect(snippet.toString()).toBe(
     `
 val array = arrayOf("foo", "bar")

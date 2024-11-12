@@ -40,7 +40,6 @@ test("java code template with listOf", () => {
     var array = ${java.listOf(["foo", "bar"])};
     System.out.println(array);
   `;
-  console.log(snippet.toString());
   expect(snippet.toString()).toBe(
     `
 var array = List.of("foo", "bar");
