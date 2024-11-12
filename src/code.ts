@@ -115,7 +115,7 @@ export class CodeImpl implements Code {
     return String.raw(this.literals, ...resolvedValues)
       .split("\n")
       .filter((line) => line.includes(OMIT_LINE_TOKEN) === false)
-      .map((line) => line.substring(unindent.length).trimEnd())
+      .map((line) => (line.startsWith(unindent) ? line.substring(unindent.length).trimEnd() : line))
       .join("\n")
       .trim();
   }

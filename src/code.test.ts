@@ -135,3 +135,25 @@ test("test code template with object containing a Date as a value and a custom f
   };
   expect(js.obj(obj, { formatter }).toString()).toBe('{\n  date: "2021-01-01T00:00:00.000Z"\n}');
 });
+
+test("test code template with nested array of code templates", () => {
+  const type = code`
+    type Foo = {
+      bar: string;
+    };
+  `;
+  const types = [type, type];
+  const snippet = code`
+    ${types}
+  `;
+
+  expect(snippet.toString()).toBe(
+    `
+type Foo = {
+  bar: string;
+};
+type Foo = {
+  bar: string;
+};`.trim(),
+  );
+});
