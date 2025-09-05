@@ -1,6 +1,6 @@
 {
   "name": "coldstitch",
-  "version": "0.4.3",
+  "version": "0.5.0",
   "description": "A code generation library, that helps you craft code snippets in code for multiple languages",
   "author": "Daniel Rochetti",
   "license": "MIT",
@@ -21,29 +21,36 @@
   "type": "module",
   "module": "./lib/index.js",
   "main": "./lib/index.cjs",
-  "types": "./src/index.ts",
+  "types": "./lib/index.d.ts",
+  "sideEffects": false,
   "exports": {
     ".": {
+      "types": "./lib/index.d.ts",
       "import": "./lib/index.js",
       "require": "./lib/index.cjs"
     },
     "./java": {
+      "types": "./lib/language/java.d.ts",
       "import": "./lib/language/java.js",
       "require": "./lib/language/java.cjs"
     },
     "./js": {
+      "types": "./lib/language/js.d.ts",
       "import": "./lib/language/js.js",
       "require": "./lib/language/js.cjs"
     },
     "./kotlin": {
+      "types": "./lib/language/kotlin.d.ts",
       "import": "./lib/language/kotlin.js",
       "require": "./lib/language/kotlin.cjs"
     },
     "./python": {
+      "types": "./lib/language/python.d.ts",
       "import": "./lib/language/python.js",
       "require": "./lib/language/python.cjs"
     },
     "./swift": {
+      "types": "./lib/language/swift.d.ts",
       "import": "./lib/language/swift.js",
       "require": "./lib/language/swift.cjs"
     }
@@ -51,19 +58,19 @@
   "typesVersions": {
     "*": {
       "java": [
-        "./src/language/java.ts"
+        "./lib/language/java.d.ts"
       ],
       "js": [
-        "./src/language/js.ts"
+        "./lib/language/js.d.ts"
       ],
       "kotlin": [
-        "./src/language/kotlin.ts"
+        "./lib/language/kotlin.d.ts"
       ],
       "python": [
-        "./src/language/python.ts"
+        "./lib/language/python.d.ts"
       ],
       "swift": [
-        "./src/language/swift.ts"
+        "./lib/language/swift.d.ts"
       ]
     }
   },
